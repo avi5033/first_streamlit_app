@@ -48,8 +48,9 @@ streamlit.header("The Fruit Load List Contains:")
 streamlit.dataframe(my_data_rows)
 
 streamlit.header("Which Fruits Do you like to add?")
-
-
+streamlit.write('The user entered ')
+streamlit.write('Thanks for adding ', add_my_fruit )
+my_cur.execute("insert into fruit_load_list values ('from streamlit')")
 fruityvice_response = requests.get("https://fruityvice.com/api/fruit/" + fruit_choice)
 
 #streamlit.text(fruityvice_response.json())
