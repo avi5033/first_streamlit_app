@@ -10,7 +10,7 @@ my_data_rows = my_cur.fetchall()
 streamlit.header("The Fruit Load List Contains:")
 #streamlit.text("Hello from Snowflake:")
 #streamlit.text(my_data_row)
-#streamlit.dataframe(my_data_rows)
+streamlit.dataframe(my_data_rows)
 
 streamlit.title('My Parents New Healthy Diner')
 
