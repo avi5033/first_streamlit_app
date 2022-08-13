@@ -1,6 +1,6 @@
 import streamlit
 import pandas
-import requests
+#import requests
 import snowflake.connector
 from urllib.error import URLError
 
@@ -25,17 +25,22 @@ fruits_to_show = my_fruit_list.loc[fruits_selected]
 streamlit.dataframe(fruits_to_show)
 
 streamlit.header("Fruityvice Fruit Advice!")
-#fruityvice_response = requests.get("https://fruityvice.com/api/fruit/watermelon")
-#fruityvice_response = requests.get("https://fruityvice.com/api/fruit/" + "kiwi")
-fruit_choice = streamlit.text_input('What fruit would you like information about?','Kiwi')
-streamlit.write('The user entered ', fruit_choice)
-
-fruityvice_response = requests.get("https://fruityvice.com/api/fruit/" + fruit_choice)
-#streamlit.text(fruityvice_response.json())
-# write your own comment -what does the next line do? 
-fruityvice_normalized = pandas.json_normalize(fruityvice_response.json())
-# write your own comment - what does this do?
-streamlit.dataframe(fruityvice_normalized)
+try:
+  #fruityvice_response = requests.get("https://fruityvice.com/api/fruit/watermelon")
+  #fruityvice_response = requests.get("https://fruityvice.com/api/fruit/" + "kiwi")
+  fruit_choice = streamlit.text_input('What fruit would you like information about?')
+  if not fruit_choice:
+      streamlit.error("Please select a fruit to get information.")
+  else:  
+      #streamlit.write('The user entered ', fruit_choice)
+      fruityvice_response = requests.get("https://fruityvice.com/api/fruit/" + fruit_choice)
+      #streamlit.text(fruityvice_response.json())
+      # write your own comment -what does the next line do? 
+      fruityvice_normalized = pandas.json_normalize(fruityvice_response.json())
+      # write your own comment - what does this do?
+      streamlit.dataframe(fruityvice_normalized)
+except URLError as e:
+streamlit.stop()
 
 my_cnx = snowflake.connector.connect(**streamlit.secrets["snowflake"])
 my_cur = my_cnx.cursor()
@@ -52,4 +57,4 @@ add_my_fruit = streamlit.text_input('The user entered:','Kiwi')
 streamlit.write('The user entered ',add_my_fruit)
 streamlit.write('Thanks for adding ', add_my_fruit )
 my_cur.execute("insert into fruit_load_list_values values ('from streamlit')")
-streamlit.stop()
+
